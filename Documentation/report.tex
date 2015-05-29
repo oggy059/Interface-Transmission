@@ -1,0 +1,212 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{graphicx}
+\usepackage[hmargin=1cm]{geometry}
+\usepackage{color}
+
+
+
+\begin{document}
+\title{\textbf {\huge Final Report\\ Creation of GUI for a transmission system based on MIMO-OFDM}}
+\maketitle
+
+\begin{center}
+\begin{tabular}{l r}
+ 
+Developers: & Syahmi Syahiran BIN AHMAD RIDZUAN \\
+& Merouane IBN ABDEL JALIL \\
+& Sahabi AWAL DADE \\ 
+& Abdeslam KABIRI\\ % Partner names
+\\
+Supervisors: &  Clency PERRINE \\ 
+& Herv\'e BOEGLEN \\ % Instructor/supervisor
+Client : & Yannis POUSSET \\	
+\end{tabular}
+\end{center}
+
+\clearpage
+\section{Project background:}
+\begin{enumerate}
+\item Human background :
+\begin{itemize}
+\item To allow allocation of project tasks
+\item To create a team spirit
+\item To meet the deadline and the client's requirements
+\end{itemize}
+\item Environmental background :
+\begin{itemize}
+\item To make the use of the transmission system based on MIMO-OFDM technology easier for beginner users
+\item To provide us with the technical tools to be used in the project which is focused on Visual Studio platform, using Matlab to design the interface. Which are also used as functionality tests for the interface
+\end{itemize}
+\clearpage
+\item Technical Background :
+\begin{itemize}
+\item The understanding of software coding for the creation of the graphic interface
+\item To master the interface functions of Matlab
+\item To visualize the code for the transmission via Visual Studio
+\end{itemize}
+\end{enumerate}
+
+\section{Project objectives :}
+The creation of the graphic interface of a platform consists of 2 transmitters and 2 receivers to be more user-friendly for a user with no programming knowledge. The interfaces (1 for the transmitting end and 1 for the receiving end) are coded using GUIDE library from Matlab. The code for the transmission is in C++ and used some functions from IT++ library, so we need to integrate the DLL into Matlab after completing the interface. Windows OS will be the OS platform for the project.  
+\begin{enumerate}
+\item Educational objectives : 
+\begin{itemize}
+\item To write the user requirements which is necessary for the engineering profession 
+\item To increase our skills in programming
+\item To practice the Scrum Agile method 
+\end{itemize}
+\item Disciplinary objectives : 
+\begin{itemize}
+\item To understand the theoretical concept of MIMO-OFDM technology
+\item To learn about the IEEE 802.11a standard
+\end{itemize}
+\item Transverse objectives : 
+\begin{itemize}
+\item To allow the exploitation of a software coding which is already written
+\item To link our practical knowledge and the project
+\item To provide us with the professional experience 
+\end{itemize}
+\end{enumerate}
+
+\clearpage
+\section{Scope of work}
+\begin{enumerate}
+\item List of important factors
+\begin{itemize}
+\item Humans
+\begin{itemize}
+\item Client
+\item Project supervisors
+\item Project developers
+\end{itemize}
+\item Techniques
+\begin{itemize}
+\item Coding
+\item PC
+\item Two transmitters and receivers
+\item Software
+\end{itemize}
+\end{itemize}
+\item List of results expected
+\begin{itemize}
+\item The creation of a graphic interface
+\item The visualization of the coding by the test
+\end{itemize}
+\item State of the art
+\begin{itemize}
+\item The IEEE 802.11a standard\\
+This standard was released on September 1999 and the first standard to be using the \textsl{OFDM} modulation. The stream data rate can go from 6Mbit/s to 54Mbit/s. It operates in 5Ghz \& 3.7 GHz bands which the latter allows the penetration range up to 5000m. 
+\item The MIMO-OFDM(Multiple Input Multiple Output-Orthogonal Frequency Division Multiplexing) technology\\
+MIMO is a simultaneous transmission of multiple signals to multiply the spectral capacity. Meanwhile, OFDM enables reliable broadband communications by distributing user data across a number of closely spaced, narrow-band sub-channels which possibly eliminates the \textsl{inter-symbol interference}.Normally, a wireless system suffers from fading and interference from other users.Therefore,by combining these two technology, we will be able to increase the \textsl{spectral efficiency }and improve \textsl{link reliability} in mind
+\item The Matlab GUI library, GUIDE\\
+The UI is created by using controls called \textsl{components} that allow the user to perform an interactive tasks. Normally an UI wait for user to manipulate a control which triggers callbacks and the UI responds to it. And as a creator, we need to define what to do for each of them asynchronously.
+\end{itemize}
+\end{enumerate}
+
+\section{Project actors :}
+\begin{itemize}
+\item Client : Yannis POUSSET
+\item Principal lecturer : Herv\'e BOEGLEN
+\item Project supervisors :
+	\begin{itemize}
+	\item Clency PERRINE 
+	\item Herv\'e BOEGLEN 
+	\end{itemize}
+\item Project developers : 
+	\begin{itemize}
+	\item Merouane IBN ABDEL JALIL   
+	\item Syahmi Syahiran BIN AHMAD RIDZUAN 
+	\item Sahabi AWAL DADE 
+	\item Abdeslam KABIRI 
+	\end{itemize}
+\end{itemize}
+
+
+\section{Available resources :}
+\begin{enumerate}
+\item Resources
+\begin{itemize}
+	\item Two software programs  
+	\item The PC
+	\item The project room
+\end{itemize}
+\item Implementations
+\begin{itemize}
+	\item Meetings with the lecturer in charge of our course  
+	\item Meetings with the principal lecturer
+	\item Meetings with the project developers to discuss the project and plan the user requirements
+	\item Documentary research
+\end{itemize}
+\end{enumerate}
+
+\section{Constraints :}
+\begin{itemize}
+\item Deadlines
+	\begin{itemize}
+		\item 9 April 2015 : Presentation of the user requirements  
+		\item 9 June 2015 : Deliver the educational report and the technical appendixes
+		\item 16 June 2015 : Oral presentation of the project
+	\end{itemize}
+\end{itemize}
+
+\section{Product description :}
+\begin{itemize}
+\item Description of the final product:
+The goal of our project is to create two graphical interfaces, the first will control the two transmitter antennas and the second interface to control the two antennas of receiving end.The first interface contains certain information such as the channel on which the data will be transmitted, the frequency of the carrier and the type of the transmitted data (Picture, Sound, Video),the stream data rate and the carrier frequency.
+
+While the second interface contains information such as the bit error rate (BER) , the received data (Picture, Sound, Video), the Peak Signal to Noise Ratio (PSNR) and the channel of frequency response,
+then we will interconnect both interfaces with the transmission code.
+
+We will also provide the client with source code of our graphical user interface which is to be used with Matlab software. 
+
+Furthermore, the simulation of the test results that we acquired from the interface of the receiver will be provided. 
+
+\item Audience : SYSCOM team of the XLIM-SIC laboratory 
+\item Framework : University of Poitiers
+\end{itemize}
+
+
+\section{The project organization :}
+\begin{itemize}
+\item Schedule
+\end{itemize}
+\includegraphics[width=20cm]{gantt.png}
+\begin{itemize}
+\clearpage
+\item Task allocation
+	\begin{itemize}
+	\item Spokesperson - Merouane
+\item Documentation - Abdeslam, Sahabi
+\item Writing - Syahmi, Merouane, Abdeslam, Sahabi   
+\item Presentation - Syahmi, Merouane, Abdeslam, Sahabi 
+\item Programming - Syahmi, Merouane, Abdeslam, Sahabi 
+\item Create graphic user interface - Syahmi, Merouane, Abdeslam, Sahabi 
+\item Integrate the dynamic link library into the Matlab - Syahmi, Abdeslam 
+\item Homogenize all variables and functions - Sahabi, Syahmi
+\item Test with Matlab \& Visual Studio - Merouane, Abdeslam
+\item Writing final report - Syahmi, Merouane, Abdeslam, Sahabi 
+\item Oral presentation - Syahmi, Merouane, Abdeslam, Sahabi 
+\item Product demonstration - Merouane, Sahabi
+	\end{itemize}
+\end{itemize}
+
+
+\section{Resources for development:}
+\begin{itemize}
+\item Equipment resources :
+	\begin{itemize}
+		\item Software ֠Matlab and Visual Studio on Windows 
+		\item PC
+		\item Software coding for the transmission in C++
+		\item Two transmitters and receivers
+		\item IT++ and GUIDE Library on Windows 
+	\end{itemize}
+	
+\item Technical resources
+	\begin{itemize}
+		\item EEA project room
+	\end{itemize}
+\end{itemize}
+
+
+\end{document}
