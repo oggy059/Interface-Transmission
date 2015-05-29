@@ -78,221 +78,314 @@ varargout{1} = handles.output;
 function Pbreceivedata_Callback(hObject, eventdata, handles)
 
 filename = handles.filename;
-[~,~,ext] = fileparts(filename) ;
-if strcmp(ext,'.jpg')||strcmp(ext,'.bmp')    
-    
+if strfind(filename,'bmp')> 0
     x=imread(filename);
-    b = imnoise(x,'gaussian',0.02);%ajouter le bruit dans l'image
-    
-    %Test si image est N&B ou couleur
-    f=imfinfo(filename);
-    type = f.ColorType;
-    
-    if strcmp(type,'indexed') == 1 % si image N &B
-        %Reponse frequentielle
-        axes(handles.axes2);
-        fmin=-0.01*(10^9);% fréquence minimale donnée
-        fmax=0.01*(10^9);%fréquence maximale donnée
-        Fe=(fmax-fmin)/length(b);% fréquence d'échantillage
-        f=fmin:Fe:fmax-Fe;% l'axe fréquentiel
+    b = imnoise(x,'gaussian',0.02);
+    b1=abs(fft(b));
+    axes(handles.axes2);
+    fmin=-0.01*(10^9);% fréquence minimale de la sous bande 
+    fmax=0.01*(10^9);%fréquence maximale de la sous bande
+    Fe=(fmax-fmin)/length(x);% fréquence d'échantillage
+    f=fmin:Fe:fmax-Fe;% l'axe fréquentiel
+    plot(f,b1)
 
-        xf=abs(fft(b));
-        plot(f,xf)
+    %Reponse impulsionnelle
+    axes(handles.axes3);
+    %b2=abs(ifft(b));
+    t=0:1/Fe:1/Fe*(length(b)-1);% l'axe temporel
+    plot(t,b)
 
+ %calcul de psnr 
+ erreur=sum((x-b).^2);% erreur quadratique
+ erreur1=mean(erreur);%erreur quadratique moyenne
+ psnr=(10*log((255^2)/(erreur1)));%calcul de peak signal noise ratio en dB
+ set(handles.psnr,'String',psnr);
+%Calcul de snr
+ moy1=mean(x);% moyenne de l'image initiale
+ moy2=mean(b);% moyenne de l'image compressée
+ var=(1/length(x))*sum((moy1-moy2).^2);% la variance
 
-        %Reponse impulsionnelle
-        axes(handles.axes3);
-        t=0:1/Fe:1/Fe*(length(b)-1);% l'axe temporel
-        %stem(t,x1)
-        plot(t,b)
-        
-        val_psnr=PSNR_grayscale(x,b);%calcul psnr
-        set(handles.psnr,'String',val_psnr);
-        
-        val_snr= 20*log(norm(x,'fro')/norm(x-b,'fro'));
-        set(handles.snr,'String',val_snr);
-    else
-        FFT_RED = fft2(b(:,:,1));
-        FFT_GREEN = fft2(b(:,:,2));
-        FFT_BLUE = fft2(b(:,:,3));
-        %Reponse frequentielle
-        axes(handles.axes2);
-        hold on;
-        plot(FFT_RED,'r');
-        plot(FFT_GREEN,'g')
-        plot(FFT_BLUE,'b');
-        
-        %Reponse impulsionnelle
-        axes(handles.axes3);
-        Imp_RED = b(:,:,1);
-        Imp_GREEN = b(:,:,2);
-        Imp_BLUE = b(:,:,3);
-        hold on;
-        plot(Imp_RED,'r');
-        plot(Imp_GREEN,'g')
-        plot(Imp_BLUE,'b');
-        
-        val_psnr = PSNR_RGB(x,b); %si image couleur
-        set(handles.psnr,'String',val_psnr);
-    end;
-    
-    x1=dec2bin(x);%pour rendre l'image émise en binaire
-    b1=dec2bin(b);%pour rendre l'image reçue en binaire
-
-    [M1,N1]=size(b1);%definir la taille_ligne et taille_colonne
-    bit_error=0;
-    for i=1:M1
-        for k=1:N1
-            if x1(i,k)~=b1(i,k)% si les images sont différentes faire%
-             bit_error=bit_error+1;
-            end
+ SNR=(10*log(var/erreur1));%snr en dB
+ set(handles.snr,'String',SNR);% affichage de SNR en dB
+ 
+ 
+x1=dec2bin(x);%pour rendre l'image émise en binaire 
+b3 = dec2bin(b); %numeriser
+[M1,N1]=size(b3);%definir la taille_ligne et taille_colonne
+bit_error=0;
+for i=1:M1
+    for k=1:N1
+        if x1(i,k)~=b3(i,k)% si les images sont différentes faire%
+         bit_error=bit_error+1;
         end
     end
-    bit_emis=M1*N1;
-    Ber=(bit_error/bit_emis);%calcul de taux d'erreurs binaires
-    set(handles.Trber,'String',Ber);% affichage de Ber en dB
-
-elseif strcmp(ext,'.mp3')||strcmp(ext,'.wav')
-    axes(handles.axes3);
-    [wave,fs]=audioread(filename);
-    t=0:1/fs:(length(wave)-1)/fs; % and get sampling frequency */
-    plot(t,wave);
-
- % graph it – try zooming while its up…not much visible until you do*/
+end
+  
+   
+  bit_emis=M1*N1;
+  Ber=(bit_error/bit_emis);%calcul de taux d'erreurs binaires
+  set(handles.Trber,'String',Ber);% affichage de Ber en dB
+ 
+elseif strfind(filename,'jpg')> 0
+    x=imread(filename);
+    y=(0.3*x(:,:,1))+(0.6*x(:,:,2))+(0.11*x(:,:,3));% la composante lumineuse de l'image couleur
+    b = imnoise(y,'gaussian',0.02);
+    b1=abs(fft(b));
     axes(handles.axes2);
-    n=length(wave)-1; 
-    f=0:fs/n:fs;
-    wavefft=abs(fft(wave)); % perform Fourier Transform *
-    plot(f,wavefft); % plot Fourier Transform */
+    fmin=-0.01*(10^9);% fréquence minimale de la sous bande 
+    fmax=0.01*(10^9);%fréquence maximale de la sous bande
+    Fe=(fmax-fmin)/length(y);% fréquence d'échantillage
+    f=fmin:Fe:fmax-Fe;% l'axe fréquentiel
+    plot(f,b1)
 
-    %Ajouter le bruit dans le son
-    [y1, ~] = audioread(filename);
-    y2 = y1 + 0.01 * randn(size(y1));
+    %Reponse impulsionnelle
+    axes(handles.axes3);
+    %b2=abs(ifft(b));
+    t=0:1/Fe:1/Fe*(length(b)-1);% l'axe temporel
+    plot(t,b)
+
+ %calcul de psnr 
+ erreur=sum((y-b).^2);% erreur quadratique
+ erreur1=mean(erreur);%erreur quadratique moyenne
+ psnr=(10*log((255^2)/(erreur1)));%calcul de peak signal noise ratio en dB
+ set(handles.psnr,'String',psnr);
+%Calcul de snr
+ moy1=mean(y);% moyenne de l'image initiale
+ moy2=mean(b);% moyenne de l'image compressée
+ var=(1/length(y))*sum((moy1-moy2).^2);% la variance
+
+ SNR=(10*log(var/erreur1));%snr en dB
+ set(handles.snr,'String',SNR);% affichage de SNR en dB
+ 
+ %calcul de ber de l'image
+y1=dec2bin(y);%pour rendre l'image émise en binaire 
+b3 = dec2bin(b); %numeriser
+[M1,N1]=size(b3);%definir la taille_ligne et taille_colonne
+bit_error=0;
+for i=1:M1
+    for k=1:N1
+        if y1(i,k)~=b3(i,k)% si les images sont différentes faire%
+         bit_error=bit_error+1;
+        end
+    end
+end
+  
+   
+  bit_emis=M1*N1;
+  Ber=(bit_error/bit_emis);%calcul de taux d'erreurs binaires
+  set(handles.Trber,'String',Ber);% affichage de Ber en dB
     
-    [c1x,c1y]=size(y1);
+elseif strfind(filename,'mp3')> 0
 
-    R=c1x;
-    C=c1y;
-    err = sum((y1-y2).^2)/(R*C);
-    sumerr = sum(err);
-    MSE=sqrt(sumerr);
-    MAXVAL=255;
-    PSNR = 10*log10(MAXVAL.^2/MSE); 
+    file = fopen(filename);%ouvrir le fichier
+    x = fread(file);%lire le fichier
+    b = imnoise(x,'gaussian',0.02);% fichier bruité
+    %calcul de psnr du son mp3
+     err = sum((x-b).^2);
+     MSE=mean(err);
+     PSNR = 10*log((255.^2)/MSE); 
+     set(handles.psnr,'String',PSNR);
+     
+     
+ %Calcul de snr du son mp3
+ moy1=mean(x);% moyenne de l'image initiale
+ moy2=mean(b);% moyenne de l'image compressée
+ var=(1/length(x))*sum((moy1-moy2).^2);% la variance
+ SNR=(10*log(var/MSE));%snr en dB
+ set(handles.snr,'String',SNR);% affichage de SNR en dB
+ 
+ 
+x1=dec2bin(x);%pour rendre l'image émise en binaire 
+b3 = dec2bin(b); %numeriser
+[M1,N1]=size(b3);%definir la taille_ligne et taille_colonne
+bit_error=0;
+for i=1:M1
+    for k=1:N1
+        if x1(i,k)~=b3(i,k)% si les images sont différentes faire%
+         bit_error=bit_error+1;
+        end
+    end
+end
+  
+   
+  bit_emis=M1*N1;
+  Ber=(bit_error/bit_emis);%calcul de taux d'erreurs binaires
+  set(handles.Trber,'String',Ber);% affichage de Ber en dB
+  
+  
+  b1=abs(fft(b));
+    axes(handles.axes2);
+    fmin=-0.01*(10^9);% fréquence minimale de la sous bande 
+    fmax=0.01*(10^9);%fréquence maximale de la sous bande
+    Fe=(fmax-fmin)/length(x);% fréquence d'échantillage
+    f=fmin:Fe:fmax-Fe;% l'axe fréquentiel
+    plot(f,b1)
+
+    %Reponse impulsionnelle
+    axes(handles.axes3);
+    %b2=abs(ifft(b));
+    t=0:1/Fe:1/Fe*(length(b)-1);% l'axe temporel
+    plot(t,b)
+    
+elseif strfind(filename,'wav') >0
+    file = fopen(filename);%ouvrir le fichier
+    x = fread(file);%lire le fichier
+    b = imnoise(x,'gaussian',0.02);% fichier bruité
+    %calcul de psnr du son mp3
+     err = sum((x-b).^2);
+     MSE=mean(err);
+     PSNR = 10*log((255.^2)/MSE); 
+     set(handles.psnr,'String',PSNR);
+     
+     
+ %Calcul de snr du son mp3
+ moy1=mean(x);% moyenne de l'image initiale
+ moy2=mean(b);% moyenne de l'image compressée
+ var=(1/length(x))*sum((moy1-moy2).^2);% la variance
+ SNR=(10*log(var/MSE));%snr en dB
+ set(handles.snr,'String',SNR);% affichage de SNR en dB
+ 
+ 
+x1=dec2bin(x);%pour rendre l'image émise en binaire 
+b3 = dec2bin(b); %numeriser
+[M1,N1]=size(b3);%definir la taille_ligne et taille_colonne
+bit_error=0;
+for i=1:M1
+    for k=1:N1
+        if x1(i,k)~=b3(i,k)% si les images sont différentes faire%
+         bit_error=bit_error+1;
+        end
+    end
+end
+  
+   
+  bit_emis=M1*N1;
+  Ber=(bit_error/bit_emis);%calcul de taux d'erreurs binaires
+  set(handles.Trber,'String',Ber);% affichage de Ber en dB
+  
+  
+  b1=abs(fft(b));
+    axes(handles.axes2);
+    fmin=-0.01*(10^9);% fréquence minimale de la sous bande 
+    fmax=0.01*(10^9);%fréquence maximale de la sous bande
+    Fe=(fmax-fmin)/length(x);% fréquence d'échantillage
+    f=fmin:Fe:fmax-Fe;% l'axe fréquentiel
+    plot(f,b1)
+
+    %Reponse impulsionnelle
+    axes(handles.axes3);
+    %b2=abs(ifft(b));
+    t=0:1/Fe:1/Fe*(length(b)-1);% l'axe temporel
+    plot(t,b)   
+    
+elseif strfind(filename,'mp4') >0
+    file = fopen(filename);
+    x = fread(file);
+    b = imnoise(x,'gaussian',0.02);%????????
+    %calcul de psnr du son mp4
+    err = sum((x-b).^2);
+    MSE=mean(err);
+    PSNR = 10*log((255.^2)/MSE); 
     set(handles.psnr,'String',PSNR);
     
-    %afficher le ber
-    x1 = dec2bin( typecast( single(y1(:)), 'uint8'), 8 ) - '0';%convertir audio original en binaire
-    b1 = dec2bin( typecast( single(y2(:)), 'uint8'), 8 ) - '0';%convertir audio bruite en binaire
-    [M1,N1]=size(b1);%definir la taille_ligne et taille_colonne
-    bit_error=0;
-    for i=1:M1
-        for k=1:N1
-            if x1(i,k)~=b1(i,k)% si les images sont différentes faire%
-             bit_error=bit_error+1;
-            end
+    
+ %Calcul de snr du son mp3
+ moy1=mean(x);% moyenne de l'image initiale
+ moy2=mean(b);% moyenne de l'image compressée
+ var=(1/length(x))*sum((moy1-moy2).^2);% la variance
+ SNR=(10*log(var/MSE));%snr en dB
+ set(handles.snr,'String',SNR);% affichage de SNR en dB
+    
+ 
+x1=dec2bin(x);%pour rendre l'image émise en binaire 
+b3 = dec2bin(b); %numeriser
+[M1,N1]=size(b3);%definir la taille_ligne et taille_colonne
+bit_error=0;
+for i=1:M1
+    for k=1:N1
+        if x1(i,k)~=b3(i,k)% si les images sont différentes faire%
+         bit_error=bit_error+1;
         end
     end
-    bit_emis=M1*N1;
-    Ber=(bit_error/bit_emis);%calcul de taux d'erreurs binaires
-    set(handles.Trber,'String',Ber);% affichage de Ber en dB
+end
+  
+   
+  bit_emis=M1*N1;
+  Ber=(bit_error/bit_emis);%calcul de taux d'erreurs binaires
+  set(handles.Trber,'String',Ber);% affichage de Ber en dB
 
-    val_snr = 10*log10(sum(y1.^2)/ sum(y2.^2));
-    set(handles.snr,'String',val_snr);
-    
-elseif strcmp(ext,'.mp4')
-    
+  
+b1=abs(fft(b));
+    axes(handles.axes2);
+    fmin=-0.01*(10^9);% fréquence minimale de la sous bande 
+    fmax=0.01*(10^9);%fréquence maximale de la sous bande
+    Fe=(fmax-fmin)/length(x);% fréquence d'échantillage
+    f=fmin:Fe:fmax-Fe;% l'axe fréquentiel
+    plot(f,b1)
+
+    %Reponse impulsionnelle
+    axes(handles.axes3);
+    %b2=abs(ifft(b));
+    t=0:1/Fe:1/Fe*(length(b)-1);% l'axe temporel
+    plot(t,b)
     
 elseif strfind(filename,'avi') >0
-
-    obj = VideoReader(filename);
-    video = read(obj);
-    nFrames = size(video,4);
     
-    %Le calcul de psnr pour video
-    psnr2 = 0;
-    for i = 1 : nFrames  
-        I(:,:,:,i) = video(:,:,:,i);%Original frame
-        N(:,:,:,i) = imnoise(video(:,:,:,i),'gaussian',0.02);%Noise-added frame
-        drawnow; %Add if we use in loop 
-        errorFrame = I - N;    
-        PSNR = 10*log10(255*255/mean(mean((errorFrame.^2))));
-        val_psnr = 0;
-        for j = 1 : 3;
-            val_psnr = val_psnr+PSNR(:,:,j,i);
-        end;
-        moy_val_psnr = val_psnr/3;%faire la moyenne pour frame RGB
-        psnr2 = psnr2 + moy_val_psnr;
-    end;
-    moy_psnr2 = psnr2/nFrames;%la moyenne de tous les frames
-    set(handles.psnr,'String',moy_psnr2);
-    
-    %Ajouter les frames bruitees dans noise.avi
-    writerObj2 = VideoWriter('noise.avi');
-    open(writerObj2);
-    for i = 1:nFrames
-    writeVideo(writerObj2,N);
-    end;
+        file = fopen(filename);
+    x = fread(file);
+    b = imnoise(x,'gaussian',0.02);%????????
+    %calcul de psnr du son mp4
+    err = sum((x-b).^2);
+    MSE=mean(err);
+    PSNR = 10*log((255.^2)/MSE); 
+    set(handles.psnr,'String',PSNR);
     
     
+ %Calcul de snr du son mp3
+ moy1=mean(x);% moyenne de l'image initiale
+ moy2=mean(b);% moyenne de l'image compressée
+ var=(1/length(x))*sum((moy1-moy2).^2);% la variance
+ SNR=(10*log(var/MSE));%snr en dB
+ set(handles.snr,'String',SNR);% affichage de SNR en dB
     
-    Imp_RED2 = 0;
-    Imp_GREEN2 = 0;
-    Imp_BLUE2 = 0;
-    for i = 1 : nFrames
-        Imp_RED(:,:,i) = N(:,:,1,i);
-        Imp_RED = uint16(Imp_RED);%la valeur limite pour uint 8 est 255
-        Imp_RED2 = Imp_RED2+ Imp_RED(:,:,i);%la somme fait plus que 255
-        Imp_GREEN(:,:,i) = N(:,:,2,i);
-        Imp_GREEN = uint16(Imp_GREEN);
-        Imp_GREEN2 = Imp_GREEN2+Imp_GREEN(:,:,i);
-        Imp_BLUE(:,:,i) = N(:,:,3,i);
-        Imp_BLUE = uint16(Imp_BLUE);
-        Imp_BLUE2 = Imp_BLUE2+Imp_BLUE(:,:,i);
-    end;
-    moy_Imp_RED2 = Imp_RED2/nFrames;
-    moy_Imp_GREEN2 = Imp_GREEN2/nFrames;
-    moy_Imp_BLUE2 = Imp_BLUE2/nFrames;
-    axes(handles.axes3);
-    hold on;
-    plot(moy_Imp_RED2,'r');
-    plot(moy_Imp_GREEN2,'g');
-    plot(moy_Imp_BLUE2,'b');
-    
-    FFT_RED = fft2(moy_Imp_RED2);
-    FFT_GREEN = fft2(moy_Imp_GREEN2);
-    FFT_BLUE = fft2(moy_Imp_BLUE2);
-    %Reponse frequentielle
-    axes(handles.axes2);
-    hold on;
-    plot(FFT_RED,'r');
-    plot(FFT_GREEN,'g');
-    plot(FFT_BLUE,'b');
-    
-    %Ouvrir les fichiers et les transformer en binaire
-    fileID = fopen(filename,'r');
-    A = fread(fileID);
-    fclose(fileID);
-    fileID = fopen('noise.avi','r');
-    B = fread(fileID);
-    fclose(fileID);
-    x1=dec2bin(A);%pour rendre l'image émise en binaire
-    b1=dec2bin(B);%pour rendre l'image reçue en binaire
-
-    [M1,N1]=size(b1);%definir la taille_ligne et taille_colonne
-    bit_error=0;
-    for i=1:M1
-        for k=1:N1
-            if x1(i,k)~=b1(i,k)% si les images sont différentes faire%
-             bit_error=bit_error+1;
-            end
+ 
+x1=dec2bin(x);%pour rendre l'image émise en binaire 
+b3 = dec2bin(b); %numeriser
+[M1,N1]=size(b3);%definir la taille_ligne et taille_colonne
+bit_error=0;
+for i=1:M1
+    for k=1:N1
+        if x1(i,k)~=b3(i,k)% si les images sont différentes faire%
+         bit_error=bit_error+1;
         end
     end
-    bit_emis=M1*N1;
-    Ber=(bit_error/bit_emis);%calcul de taux d'erreurs binaires
-    set(handles.Trber,'String',Ber);% affichage de Ber en dB
 end
-    
-function psnr_Callback(hObject, eventdata, handles)
+  
+   
+  bit_emis=M1*N1;
+  Ber=(bit_error/bit_emis);%calcul de taux d'erreurs binaires
+  set(handles.Trber,'String',Ber);% affichage de Ber en dB
+
+  
+b1=abs(fft(b));
+    axes(handles.axes2);
+    fmin=-0.01*(10^9);% fréquence minimale de la sous bande 
+    fmax=0.01*(10^9);%fréquence maximale de la sous bande
+    Fe=(fmax-fmin)/length(x);% fréquence d'échantillage
+    f=fmin:Fe:fmax-Fe;% l'axe fréquentiel
+    plot(f,b1)
+
+    %Reponse impulsionnelle
+    axes(handles.axes3);
+    %b2=abs(ifft(b));
+    t=0:1/Fe:1/Fe*(length(b)-1);% l'axe temporel
+    plot(t,b)
+end
+
+
+
+
+function psnr_Callback(hObject, eventdata, ~)
 % hObject    handle to psnr (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -302,7 +395,7 @@ function psnr_Callback(hObject, eventdata, handles)
 
 
 % --- Executes during object creation, after setting all properties.
-function psnr_CreateFcn(hObject, eventdata, handles)
+function psnr_CreateFcn(hObject, eventdata, ~)
 % hObject    handle to psnr (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
@@ -448,7 +541,7 @@ function snr_Callback(hObject, eventdata, handles)
 
 
 % --- Executes during object creation, after setting all properties.
-function snr_CreateFcn(hObject, eventdata, handles)
+function snr_CreateFcn(hObject, eventdata, ~)
 % hObject    handle to snr (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
@@ -550,7 +643,7 @@ function selectdata_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % 
-[filename,pathname] = uigetfile({'*.jpg';'*.mp3';'*wav';'*.mp4';'*avi';'*bmp'},'File Selector');%Enable user to browse file
+[filename,pathname] = uigetfile({'*.jpg';'*.mp3';'*wav';'*.mp4';'*avi';'*bmp';'*wma'},'File Selector');%Enable user to browse file
 file = strcat(pathname,filename);%Compile fullpath to the selected file
 handles = guidata(hObject);
 setappdata(0,'file',file);%store the value in GUI, so that other GUI can recall
@@ -573,18 +666,19 @@ function showdata_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 filename =handles.filename;
-[~,~,ext] = fileparts(filename) ;
-if strcmp(ext,'.jpg')||strcmp(ext,'.bmp')
-    axes(handles.axes1);
+[~,~, ext] = fileparts(filename); 
+if strcmp(ext,'.bmp')||strcmp(ext,'.jpg')
     x =imread(filename);
-    b = imnoise(x,'gaussian',0.02);
+    b = imnoise(x,'gaussian',0.002);
+    figure(1) 
     imshow(b);%affichage de l'image
-  
-elseif strcmp(ext,'.mp3')
+     
+   
+elseif strcmp(ext,'.mp3')||strcmp(ext,'.wma')||strcmp(ext,'.wav')
     Audioplayer;
-elseif strcmp(ext,'.avi')
+elseif strfind(filename,'avi')> 0
     movieCommand;
-elseif strcmp(ext,'.mp4')
+elseif strfind(filename,'mp4') >0
     implay(filename);
     [y,f]=audioread(filename);
     pl=audioplayer(y,f);
@@ -592,7 +686,7 @@ elseif strcmp(ext,'.mp4')
     resume(pl);
     guidata(hObject,handles);
  end;
- 
+ handles.filename = filename;
  guidata(hObject,handles);
 
 
@@ -601,7 +695,6 @@ function cleardata_Callback(hObject, eventdata, handles)
 % hObject    handle to cleardata (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-cla(handles.axes1,'reset');
 cla(handles.axes2,'reset');
 cla(handles.axes3,'reset');
 set(handles.snr,'String','');
