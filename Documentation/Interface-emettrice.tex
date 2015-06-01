@@ -1,0 +1,132 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{graphicx}
+\usepackage[hmargin=1cm]{geometry}
+\usepackage{color}
+\usepackage{amssymb}
+
+\begin{document}
+\title{\textbf {\huge Final Report\\ Creation of GUI for a transmission system based on MIMO-OFDM}}
+\maketitle
+
+\begin{center}
+\begin{tabular}{l r}
+ 
+Developers: & Syahmi Syahiran BIN AHMAD RIDZUAN \\
+& Merouane IBN ABDEL JALIL \\
+& Sahabi AWAL DADE \\ 
+& Abdeslam KABIRI\\ % Partner names
+\\
+Supervisors: &  Clency PERRINE \\ 
+& Herv\'e BOEGLEN \\ % Instructor/supervisor
+Client : & Yannis POUSSET \\	
+\end{tabular}
+\end{center}
+
+\clearpage
+
+\section{Conception of Transmitter Interface}
+\subsection{Design evolution}
+\begin{center}
+\begin{tabular}{c r r r c r r r c}
+\includegraphics[height=8cm]{design1.png}
+
+&&&&&&&&\includegraphics[height=8cm]{design2.png}\\
+
+Initial design &&&&$\Rightarrow$&&&& Final Design
+\end{tabular}
+\end{center}
+\begin{center}
+\includegraphics[width=15cm]{design3.png}
+\end{center}
+\par At the beginning, we start by adding these components in our design :
+\begin{itemize}
+	\item Data Panel
+	\begin{itemize}
+		\item Popup list of stream data rate 
+		\item Button to browse the file
+	\end{itemize}
+	\item Channel Panel
+	\begin{itemize}
+		\item Two channel selection areas 
+		\item Button to start the transmission
+	\end{itemize}
+\end{itemize}
+\par As per request from our client, we've done some modifications on our design :
+\begin{itemize}
+	\item Control Panel
+	\begin{itemize}
+		\item Modulation Panel that consists of two transmission methods
+		\item Antenna Panel that consists of two antennas
+	\end{itemize}
+	\item Data Panel
+	\begin{itemize}
+		\item Popup list of stream data rate
+		\item Text area for the desired transmission time
+		\item Button to browse the file 
+	\end{itemize}
+	\item Channel Panel
+	\begin{itemize}
+		\item One channel selection area
+		\item Text area that display the carrier frequency 
+	\end{itemize}
+	\item Button to start the transmission
+\end{itemize}
+ 
+
+\subsection{Interface evolution}
+
+\includegraphics[width=8cm]{interface1.png}
+\subsubsection{Video Player}
+\includegraphics[width=7cm]{interface3.png}
+\par \vspace{0.25cm}To keep the main interface uncluttered and simple, we use another GUI to play the video file. We also use the same look as the Windows Media Player for a familiar look.
+\subsubsection{Audio Player}
+\includegraphics[width=5cm]{interface4.png}
+\par \vspace{0.25cm}For the same reason as the video player, we create another GUI to play the audio file. We only add play \& stop buttons with progress slider.
+
+\subsubsection{Difficulties \& Constraints}
+\par \vspace{0.25cm} The examples for audio \& video player are not many and most of them are elaborated version, so it's not easy to recreate a simpler interface. We want the GUI to not obstruct the main interface but it's limited by Matlab software. We're also not able to play mp4 file correctly(we are able to play the video and audio separately). For audio file, we cannot play mp3 that was encoded from wav file. We use a completed program for the video player as the native way took much longer time and is not rendering the video optimally. As the transmitter and receiver antennas are controlled separately, we need to create two interfaces for each antenna that dependent to one another. But as we use separate interface, we cannot send the value used in transmitter to receiver so that it work synchronously. Therefore we need a user for each end to confirm the frequency used before the file transmission. For the comparison,the receiver must already has his own database containing all the file that will be transmitted to do the analysis.
+  
+\subsection{Comparison Design-to-Interface}
+\begin{center}
+\begin{tabular}{c r r r | r r r c}
+\includegraphics[height=8cm]{design2.png}&&&&&&&\includegraphics[height=8cm]{interface1.png}\\
+Design&&&&&&&Interface\\
+\end{tabular}
+\end{center}
+\par \vspace{0.25cm}Comparing our final design and our GUI on Matlab, there are some compromise in the look of the UI. The Matlab GUIDE emphasizes on functionality rather than the look of the UI, so there is some constraint when we want to implement the same design as we envisioned. To improve our UI look, we strive for the consistency of every element in our interface and try to make it familiar and user-friendly. We also strive for user experience consistency across our interface.  
+
+
+\subsubsection{UI guideline}
+We use these 10 points of creating a better UI :
+\begin{center}
+\includegraphics[width=15cm]{ui1.png}\\
+\end{center}
+
+\par  \vspace{0.25cm} 3) Minimize memory load
+\par - Use Minimalist style, don’t use heavy UI
+
+\par  \vspace{0.25cm} 4) Use constructive error message
+\par -Do not only display error, but also suggest how to avoid the error
+\par \includegraphics[width=8cm]{ui2.png}\\
+\includegraphics[width=13cm]{ui3.png}
+
+\par  \vspace{0.25cm} 7) Make shortcuts
+\par - 'Ctrl' + 'C' to exit the program
+\par - 'Spacebar' to resume/pause the video player
+\par - 'O' to open file 
+\par - 'Enter' to start the tranmission 
+
+\par  \vspace{0.25cm} 8) Give feedbacks
+\par - Tell user if there is error (error message).
+\par \includegraphics[width=8cm]{ui2.png}
+\par - Tell user if it works (confirmation message). 
+\par \includegraphics[width=9cm]{ui4.png}
+\begin{center}
+\includegraphics[width=15cm]{ui5.png}\\
+\end{center}
+
+
+
+
+\end{document}
+
