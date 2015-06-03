@@ -26,17 +26,9 @@ Client : & Yannis POUSSET \\
 
 \section{Conception of Transmitter Interface}
 \subsection{Design evolution}
+\subsubsection{Initial design}
 \begin{center}
-\begin{tabular}{c r r r c r r r c}
 \includegraphics[height=8cm]{design1.png}
-
-&&&&&&&&\includegraphics[height=8cm]{design2.png}\\
-
-Initial design &&&&$\Rightarrow$&&&& Final Design
-\end{tabular}
-\end{center}
-\begin{center}
-\includegraphics[width=15cm]{design3.png}
 \end{center}
 \par At the beginning, we start by adding these components in our design :
 \begin{itemize}
@@ -51,81 +43,112 @@ Initial design &&&&$\Rightarrow$&&&& Final Design
 		\item Button to start the transmission
 	\end{itemize}
 \end{itemize}
+
+\subsubsection{Revised design}
+\begin{center}
+\includegraphics[height=10cm]{design2.png}
+\end{center}
 \par As per request from our client, we've done some modifications on our design :
 \begin{itemize}
-	\item Control Panel
-	\begin{itemize}
-		\item Modulation Panel that consists of two transmission methods
-		\item Antenna Panel that consists of two antennas
-	\end{itemize}
-	\item Data Panel
-	\begin{itemize}
-		\item Popup list of stream data rate
-		\item Text area for the desired transmission time
-		\item Button to browse the file 
-	\end{itemize}
-	\item Channel Panel
-	\begin{itemize}
-		\item One channel selection area
-		\item Text area that display the carrier frequency 
-	\end{itemize}
-	\item Button to start the transmission
+	\item We grouped each element into 3 main panels; Control, Data and Channel
+	\item We added two methods of transmission; SISO and MIMO
+	\item We added the choice of antennas
+	\item We added pop-up menu for Desired Bit Error Rate
+	\item We added text area for Desired Transmission Time
+	\item We removed one channel selection element as it is unnecessary
+	\item We added the text area that display the carrier frequency
 \end{itemize}
- 
 
-\subsection{Interface evolution}
+\subsubsection{Final design}
+\begin{center}
+\includegraphics[height=11cm]{design3.png}
+\end{center}
+\par As per request from our client, we've done some modifications on our design :
+\begin{itemize}
+	\item We added two more methods of transmission; SIMO and MISO
+	\item We replaced the choice of antennas with a pop-up menu that changes its content depending on selected method
+	\item We moved the text area for Desired Transmission Time in Control Panel
+	\item We added the choice of loop; Open or Closed that can enable/disable the Desired Bit Error rate
+\end{itemize}
 
-\includegraphics[width=8cm]{interface1.png}
+\subsection{Interface Description}
+
+\includegraphics[height=12cm]{interface1.png}
+\subsubsection{Adaptive Element}
+In our interface, we try to help the user by listing predefined values according to the choice.
+\begin{itemize}
+	\item 1st example : The content of Antenna pop-up menu changes according to the selected Transmission Method
+	\par \includegraphics[height=4cm]{interface5.png}  \includegraphics[height=4cm]{interface6.png}
+	\item 2nd example : The content of BER pop-up menu disabled/enabled according to the selected type of loop
+	\par \includegraphics[height=2cm]{interface7.png} $\Rightarrow$ \includegraphics[height=2cm]{interface8.png}
+\end{itemize}
+
 \subsubsection{Video Player}
 \includegraphics[width=7cm]{interface3.png}
-\par \vspace{0.25cm}To keep the main interface uncluttered and simple, we use another GUI to play the video file. We also use the same look as the Windows Media Player for a familiar look.
+\par \vspace{0.25cm}To keep the main interface uncluttered and simple, we use another GUI to play the video file. We also use the same visual look as the Windows Media Player for a familiar look.
 \subsubsection{Audio Player}
 \includegraphics[width=5cm]{interface4.png}
 \par \vspace{0.25cm}For the same reason as the video player, we create another GUI to play the audio file. We only add play \& stop buttons with progress slider.
 
 \subsubsection{Difficulties \& Constraints}
-\par \vspace{0.25cm} The examples for audio \& video player are not many and most of them are elaborated version, so it's not easy to recreate a simpler interface. We want the GUI to not obstruct the main interface but it's limited by Matlab software. We're also not able to play mp4 file correctly(we are able to play the video and audio separately). For audio file, we cannot play mp3 that was encoded from wav file. We use a completed program for the video player as the native way took much longer time and is not rendering the video optimally. As the transmitter and receiver antennas are controlled separately, we need to create two interfaces for each antenna that dependent to one another. But as we use separate interface, we cannot send the value used in transmitter to receiver so that it work synchronously. Therefore we need a user for each end to confirm the frequency used before the file transmission. For the comparison,the receiver must already has his own database containing all the file that will be transmitted to do the analysis.
+\par \vspace{0.25cm} The examples for audio \& video player are not many and most of them are elaborated version, so it's not easy to recreate a simpler interface. We want the other GUI to not obstruct the main interface but we can implement it as it's limited by Matlab software. We're also not able to play mp4 file correctly(we are able to play the video and audio separately). For audio file, we cannot play mp3 that was encoded from wav file. We use a completed program for the video player as the native way took much longer time and is not rendering the video optimally. 
+\par \vspace{0.25cm} As the transmitter and receiver antennas are controlled separately, we need to create two interfaces for each antenna that dependent to one another. But as we use separate interface, we cannot send the value used in transmitter to receiver so that it work synchronously. Therefore we need a user for each end to confirm the frequency used before the file transmission. For the comparison,the receiver must already has his own database containing all the file that will be transmitted to do the analysis.
   
 \subsection{Comparison Design-to-Interface}
 \begin{center}
 \begin{tabular}{c r r r | r r r c}
-\includegraphics[height=8cm]{design2.png}&&&&&&&\includegraphics[height=8cm]{interface1.png}\\
+\includegraphics[height=10cm]{design4.png}&&&&&&&\includegraphics[height=10cm]{interface1.png}\\
 Design&&&&&&&Interface\\
 \end{tabular}
 \end{center}
-\par \vspace{0.25cm}Comparing our final design and our GUI on Matlab, there are some compromise in the look of the UI. The Matlab GUIDE emphasizes on functionality rather than the look of the UI, so there is some constraint when we want to implement the same design as we envisioned. To improve our UI look, we strive for the consistency of every element in our interface and try to make it familiar and user-friendly. We also strive for user experience consistency across our interface.  
+
+\subsection{Conclusion on the final product}
+\par \vspace{0.25cm}Comparing our final design and our GUI on Matlab, there are some compromise in the aesthetic of the UI. The Matlab GUIDE emphasizes on functionality rather than the aesthetic of the UI, so there is some constraint when we want to implement the same design as we envisioned. This is normal as a GUI is focused on functionality and application domain. To improve our UI visual look, we strive for the consistency of every element in our interface and try to make it familiar and user-friendly. We also strive for user experience consistency across our interface.
+\par \vspace{0.25cm}In the functionality domain, we try to imagine the type of user that will use our interface. We divide them into 3 types of user; Beginner, Intermediate and Expert. To satisfy the need of these types of user, we start with the beginner, as Beginner cannot use program oriented for Intermediate and Expert but they can use program oriented for Beginner. We define a beginner as a person who is not into programming but has some knowledge about the technology used in our project. So, in our UI, we strive to avoid the need of programming, give some predefined value, flexibility. We will explain that in details in the next section.  
 
 
-\subsubsection{UI guideline}
-We use these 10 points of creating a better UI :
-\begin{center}
-\includegraphics[width=15cm]{ui1.png}\\
-\end{center}
-
-\par  \vspace{0.25cm} 3) Minimize memory load
-\par - Use Minimalist style, don’t use heavy UI
-
-\par  \vspace{0.25cm} 4) Use constructive error message
-\par -Do not only display error, but also suggest how to avoid the error
-\par \includegraphics[width=8cm]{ui2.png}\\
-\includegraphics[width=13cm]{ui3.png}
-
-\par  \vspace{0.25cm} 7) Make shortcuts
-\par - 'Ctrl' + 'C' to exit the program
-\par - 'Spacebar' to resume/pause the video player
-\par - 'O' to open file 
-\par - 'Enter' to start the tranmission 
-
-\par  \vspace{0.25cm} 8) Give feedbacks
-\par - Tell user if there is error (error message).
-\par \includegraphics[width=8cm]{ui2.png}
-\par - Tell user if it works (confirmation message). 
-\par \includegraphics[width=9cm]{ui4.png}
-\begin{center}
-\includegraphics[width=15cm]{ui5.png}\\
-\end{center}
-
-
+\subsection{UI guideline}
+We use these 10 points of creating a better UI(from Janne Jul Jensen,Senior Interaction Designer in Trifork) :
+\begin{enumerate}
+\item Simple and natural dialogue
+	\par - Use a well-known and familiar word
+	\par \vspace{0.25cm}\includegraphics[width=6cm]{ui2bis.png}
+	\par \textit{Figure : Browse and Start button}
+\item Speak the user’s language
+	\par - Prevent the need of coding. Ex : Browse button to open file. No need to write the file directory 
+	\par - Flexible and easy to use the file located inside of other folder
+\item Minimize memory load
+	\par - Use Minimalist style, don’t use heavy UI
+\item Use constructive error message
+	\par -Do not only display error, but also suggest how to avoid the error
+	\par \includegraphics[width=8cm]{ui2.png}
+\item 5)Support recall
+	\par - If user need to define a value, it’s better to give a finite amount of values to be chosen from
+	\par \includegraphics[width=6cm]{ui4bis.png}
+\item Make clear exits
+	\par- Close button(x button)
+	\par \includegraphics[width=8cm]{ui3bis.png}
+\item Make shortcuts
+	\par - 'Ctrl' + 'C' to exit the program
+	\par - 'Spacebar' to resume/pause the video player
+	\par - 'O' to open file 
+	\par - 'Enter' to start the tranmission
+\item Give feedbacks
+	\par - Tell user if there is error (error message).
+	\par \includegraphics[width=8cm]{ui2.png}
+	\par - Tell user if it works (confirmation message). 
+	\par \includegraphics[width=9cm]{ui4.png} 
+\item Prevent errors
+	\par - Indicate warning before selection (warning)
+	\par - Warning should be more stand out (use other color)
+	\par \includegraphics[width=4cm]{ui5bis.png} 
+\item Strive for consistency
+	\par - Same size for button
+	\par - type of selection
+	\par - Same size of font and color
+	\par - Same size of partition
+	\par \includegraphics[width=7cm]{ui6.png} 	
+\end{enumerate}
 
 
 \end{document}
