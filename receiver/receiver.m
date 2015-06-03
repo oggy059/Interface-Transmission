@@ -23,7 +23,7 @@ function varargout = frequency_response1(varargin)
 
 % Edit the above text to modify the response to help frequency_response1
 
-% Last Modified by GUIDE v2.5 26-May-2015 14:29:46
+% Last Modified by GUIDE v2.5 03-Jun-2015 15:11:43
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -80,33 +80,60 @@ function Pbreceivedata_Callback(hObject, eventdata, handles)
 filename = handles.filename;
 if strfind(filename,'bmp')> 0
     x=imread(filename);
-    b = imnoise(x,'gaussian',0.02);
-    b1=abs(fft(b));
+    b = imnoise(x,'gaussian',0.00002);
+    
     axes(handles.axes2);
-    fmin=-0.01*(10^9);% fréquence minimale de la sous bande 
-    fmax=0.01*(10^9);%fréquence maximale de la sous bande
-    Fe=(fmax-fmin)/length(x);% fréquence d'échantillage
-    f=fmin:Fe:fmax-Fe;% l'axe fréquentiel
-    plot(f,b1)
+    N=length(b);
+    Q = b(1:2:N);
+    I = b(2:2:N);
+    Module = (abs(fft(Q + I)));
+    
+    Module=Module(1:length(Module)/2);
+    plot((0:length(Module)-1)*(1/length(Module)),Module);
+    
+%     
+%     fmin = 20;
+%     fmax = 100;
+%     BP = fmax - fmin;
+%     N1 = N/2;
+%     Fe = BP/(N1-1);
+%     f = (fmin:Fe:fmax)*10^(9);
+%     plot(f,Module)
+     
+    %b1=abs(fft(b));
+    
+   
 
     %Reponse impulsionnelle
     axes(handles.axes3);
-    %b2=abs(ifft(b));
-    t=0:1/Fe:1/Fe*(length(b)-1);% l'axe temporel
-    plot(t,b)
+    Te = 1/Fe;
+    y=(fft(Module));
+    %b2=abs(ifft(y));
+    t = (0:Te:Te*(N1-1))*10^(-9);
+    plot(t,y)
 
  %calcul de psnr 
  erreur=sum((x-b).^2);% erreur quadratique
  erreur1=mean(erreur);%erreur quadratique moyenne
  psnr=(10*log((255^2)/(erreur1)));%calcul de peak signal noise ratio en dB
  set(handles.psnr,'String',psnr);
-%Calcul de snr
- moy1=mean(x);% moyenne de l'image initiale
- moy2=mean(b);% moyenne de l'image compressée
- var=(1/length(x))*sum((moy1-moy2).^2);% la variance
+% %Calcul de snr
+P0=10;% Puissance de la constellation transmise
+I=b(1:2:length(b)); %partie complexe de l'image reçue
+Q=b(2:2:length(b));%partie réelle de l'image reçue
+I_moy=(1/length(I))*sum(abs(I).^2);%partie complexe de l'image reçue moyenne
+Q_moy=(1/length(Q))*sum(abs(Q).^2);%partie réelle de l'image reçue moyenne
+EVM=(sqrt(I_moy+Q_moy)/P0);% vecteur erreur de modulation moyen
+SNR=(10*log(1/EVM)^2);%snr en dB
+set(handles.snr,'String',SNR);% affichage de SNR en dB
+ 
 
- SNR=(10*log(var/erreur1));%snr en dB
- set(handles.snr,'String',SNR);% affichage de SNR en dB
+
+%  moy1=mean(x);% moyenne de l'image initiale
+%  moy2=mean(b);% moyenne de l'image compressée
+%  var=(1/length(x))*sum((moy1-moy2).^2);% la variance
+%SNR=(10*log(var/erreur1));%snr en dB
+%set(handles.snr,'String',SNR);% affichage de SNR en dB
  
  
 x1=dec2bin(x);%pour rendre l'image émise en binaire 
@@ -585,19 +612,47 @@ function uipanel12_SelectionChangeFcn(hObject, eventdata, handles)
 %	NewValue: handle of the currently selected object
 % handles    structure with handles and user data (see GUIDATA)
 switch get(eventdata.NewValue,'Tag') % Get Tag of selected object.
-    case 'radiobutton1'
-        global rb;
-        rb = 1;%if SISO is selected
-        set(handles.antreceiver,'Enable','on');%Enable to select antreceiver
-        set(handles.antreceiver2,'Enable','on');%Enable to select antreceiver2
-        set(handles.antreceiver,'Value',1);%Select antreceiver by default
-        set(handles.antreceiver2,'Value',0);%Unselect antreceiver2 by default
-    case 'radiobutton2'
-        rb = 0;%if MIMO is selected, we need to select both option and prevent the user to change the selection
-        set(handles.antreceiver,'Value',1);%Select antreceiver
-        set(handles.antreceiver2,'Value',1);%Select antreceiver2
-        set(handles.antreceiver,'Enable','off');%Disable to select antreceiver
-        set(handles.antreceiver2,'Enable','off');%Disable to select antreceiver2
+%     case 'radiobutton1'
+%        %global rb;
+%        % rb = 1;%if SISO is selected
+%         set(handles.antreceiver,'Enable','on');%Enable to select antreceiver
+%         set(handles.antreceiver2,'Enable','on');%Enable to select antreceiver2
+%         set(handles.antreceiver,'Value',1);%Select antreceiver by default
+%         set(handles.antreceiver2,'Value',0);%Unselect antreceiver2 by default
+%     case 'radiobutton3'
+%         rb = 0;%if MIMO is selected, we need to select both option and prevent the user to change the selection
+%         set(handles.antreceiver,'Value',1);%Select antreceiver
+%         set(handles.antreceiver2,'Value',1);%Select antreceiver2
+%         set(handles.antreceiver,'Enable','off');%Disable to select antreceiver
+%         set(handles.antreceiver2,'Enable','off');%Disable to select antreceiver2
+        
+       
+    case 'radiobutton1'%SISO
+        set(handles.popupmenu2,'String','1-to-1');
+    case 'radiobutton2'%SIMO
+        antenna1{1}= '1-to-2';
+        antenna1{2}= '1-to-3';
+        antenna1{3}= '1-to-4';
+        set(handles.popupmenu2,'String',antenna1);
+    case 'radiobutton4'%MISO
+        antenna2{1}= '2-to-1';
+        antenna2{2}= '3-to-1';
+        antenna2{3}= '4-to-1';
+        set(handles.popupmenu2,'String',antenna2);
+    case 'radiobutton3' %MIMO
+        antenna3{1}= '2-to-2';
+        antenna3{2}= '2-to-3';
+        antenna3{3}= '2-to-4';
+        antenna3{4}= '3-to-2';
+        antenna3{5}= '3-to-3';
+        antenna3{6}= '3-to-4';
+        antenna3{7}= '4-to-2';
+        antenna3{8}= '4-to-3';
+        antenna3{9}= '4-to-4';
+        set(handles.popupmenu2,'String',antenna3);
+
+
+
         
 end
 
@@ -672,7 +727,32 @@ if strcmp(ext,'.bmp')||strcmp(ext,'.jpg')
     b = imnoise(x,'gaussian',0.002);
     figure(1) 
     imshow(b);%affichage de l'image
-     
+    
+    %y = qammod(b,16);
+    %figure(2)
+    %scatterplot(y)
+    
+% hMod = comm.RectangularQAMModulator('ModulationOrder',16);
+% figure(3)
+% constellation(hMod)
+
+
+%         hAWGN = comm.AWGNChannel('NoiseMethod','Signal to noise ratio (Es/No)',... 
+%     'EsNo',20);
+%         hScope = comm.ConstellationDiagram;
+%         modData = step(hMod,b);
+%         ampImb = 10; % dB
+%         Q = exp(0.5*ampImb/20)*real(modData);
+%         I = exp(-0.5*ampImb/20)*imag(modData);
+%         Sig = complex(I,Q);
+%         rxSig = step(hAWGN,Sig);
+%         figure(2)
+%         step(hScope,rxSig)
+%h = comm.BPSKModulator;
+%refC = constellation(h);
+%figure(2)
+%constellation(h)
+
    
 elseif strcmp(ext,'.mp3')||strcmp(ext,'.wma')||strcmp(ext,'.wav')
     Audioplayer;
@@ -700,3 +780,33 @@ cla(handles.axes3,'reset');
 set(handles.snr,'String','');
 set(handles.psnr,'String','');
 set(handles.Trber,'String','');
+
+
+% --- Executes on selection change in popupmenu2.
+function popupmenu2_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu2 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu2
+
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pushbutton6.
+function pushbutton6_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
