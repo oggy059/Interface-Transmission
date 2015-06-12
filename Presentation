@@ -1,0 +1,274 @@
+\documentclass{beamer}
+% This is the file main.tex
+\usetheme{Antibes}
+\begin{document}
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+\title{User Requirements Presentation}
+\subtitle{Creation of GUI for a transmission system based on MIMO-OFDM}
+\author{\textbf{Presentators :}\\
+Syahmi Syahiran BIN AHMAD RIDZUAN \\
+Merouane IBN ABDELJALIL \\
+Sahabi AWAL DADE \\ 
+Abdeslam KABIRI\\
+\textbf{Supervisors:}\\
+Clency PERRINE \\ 
+Herv\'e BOEGLEN \\
+\textbf{Client :}\\
+Yannis POUSSET \\}
+\date{\today}
+
+\frame{\titlepage} 
+
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+		
+  \end{frame}
+}
+
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[part=1]
+  \end{frame}
+}
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[part=2]
+  \end{frame}
+}
+
+\part{1}
+\section{Background}
+\frame{
+\begin{Huge}Project Background\end{Huge}}
+
+\subsection{Human Background }
+\frame{\frametitle{Human Background} 
+\begin{itemize}
+\item To allow allocation of project tasks
+\item To create a team spirit
+\item To meet the deadline and the client's requirements
+\end{itemize}
+}
+\subsection{Environmental background }
+\frame{\frametitle{Environmental background}
+\begin{itemize}
+\item To make the use of the transmission system based on MIMO-OFDM technology easier for beginner users
+\item To provide us with the technical tools to be used in the project which is focused on Visual Studio platform, using Matlab to design the interface. They are also used as functionality tests for the interface
+\end{itemize}
+}
+\subsection{Technical Background }
+\frame{\frametitle{Technical Background} 
+\begin{itemize}
+\item The understanding of software coding for the creation of the graphic interface
+\item To master the interface functions of Matlab
+\item To visualize the code for the transmission via Visual Studio
+\end{itemize}
+}
+
+\section{Objectives}
+\frame{
+\begin{Huge}Project Objectives\end{Huge}}
+
+\subsection{Educational objectives}
+\frame{\frametitle{Educational objectives} 
+\begin{itemize}
+\item To write the user requirements which is necessary for the engineering profession 
+\item To increase our skills in programming
+\item To practice the Scrum Agile method 
+\end{itemize}
+}
+
+\subsection{Disciplinary objectives }
+\frame{\frametitle{Disciplinary objectives } 
+\begin{itemize}
+\item To understand the theoretical concept of MIMO-OFDM technology
+\item To learn about the 802.11 standard
+\end{itemize}
+}
+\subsection{Transverse objectives}
+\frame{\frametitle{Transverse objectives }  
+\begin{itemize}
+\item To allow the exploitation of a software coding which is already written
+\item To link our practical knowledge and the project
+\item To provide us with the professional experience 
+\end{itemize}
+}
+
+\section{Scope of work}
+\frame{
+\begin{Huge}Scope of work\end{Huge}}
+\subsection{List of important factors}
+\frame{\frametitle{List of important factors} 
+\begin{itemize}
+\item Humans
+\begin{itemize}
+\item Client
+\item Project supervisors
+\item Project developers
+\end{itemize}
+\item Techniques
+\begin{itemize}
+\item Coding
+\item PC
+\item Two transmitters and receivers
+\item Software
+\end{itemize}
+\end{itemize}
+}
+\subsection{List of results expected}
+\frame{\frametitle{List of results expected} 
+\begin{itemize}
+\item The creation of a graphic interface
+\item The visualization of the coding by the test
+\end{itemize}
+}
+\subsection{State of the art}
+\frame{\frametitle{State of the art} 
+\begin{itemize}
+\item MIMO-OFDM technology is used for increased spectral efficiency and improved link reliability
+\item Creation of a graphic interface by using GUIDE library
+\item The usage of IEEE 802.11a standard for the transmission system as the pioneer in using OFDM modulation
+\end{itemize}
+}
+
+\section{Project actors}
+\frame{\frametitle{Project actors}
+\begin{itemize}
+\item Client : Yannis POUSSET
+\item Principal lecturer : Herv\'e BOEGLEN
+\item Project supervisors :
+	\begin{itemize}
+	\item Clency PERRINE 
+	\item Herv\'e BOEGLEN 
+	\end{itemize} \clearpage
+\item Project developers : 
+	\begin{itemize}
+	\item Merouane IBN ABDELJALIL   
+	\item Syahmi Syahiran BIN AHMAD RIDZUAN 
+	\item Sahabi AWAL DADE 
+	\item Abdeslam KABIRI 
+	\end{itemize}
+\end{itemize}
+}
+
+
+\section{Available resources}
+\frame{
+\begin{Huge}Available resources\end{Huge}}
+\subsection{Resources}
+\frame{\frametitle{Resources}
+\begin{itemize}
+	\item Two software programs  
+	\item The PC
+	\item The project room
+\end{itemize}
+}
+\subsection{Implementations}
+\frame{\frametitle{Implementations}
+\begin{itemize}
+	\item Meetings with the lecturer in charge of our course
+	\item Meetings with the principal lecturer
+	\item Meetings with the project developers to discuss the project and plan the user requirements
+	\item Documentary research
+\end{itemize}
+}
+\part{2}
+\section{Constraints}
+\frame{\frametitle{Deadline}
+	\begin{itemize}
+		\item 9 April 2015 : Presentation of the user requirements  
+		\item Deliver a brief report about project progress every end of week
+		\item 9 June 2015 : Deliver the educational report and the technical appendixes
+		\item 16 June 2015 : Oral presentation of the project
+	\end{itemize}
+}
+\section{Product description }
+\frame{
+\begin{Huge}Product description \end{Huge}}
+\subsection{Description}
+\frame{\frametitle{Description}
+\begin{itemize}
+\item The goal of our project is to create two graphical interfaces, 
+\begin{itemize}
+\item the first will control the parameter of the two transmitter antennas 
+\item the second interface will control the two antennas of receiving end.
+\end{itemize}
+\item The first interface contains certain information, which is:
+\begin{itemize}
+\item  the channel on which the data will be transmitted 
+\item the type of the transmitted data (Picture, Sound, Video)..
+\item The stream data rate
+\item The carrier frequency
+\end{itemize}
+\item The second interface contains these informations :
+\begin{itemize}
+\item the bit error rate (BER)
+\item the received data (Picture, Sound, Video)
+\item the Peak Signal to Noise Ratio (PSNR)
+\item the channel frequency response
+\end{itemize}
+\end{itemize}
+}
+
+\subsection{Audience \& Framework }
+\frame{\frametitle{Audience \& Framework}
+\begin{itemize}
+\item Audience : SYSCOM team of the XLIM-SIC laboratory 
+\item Framework : University of Poitiers
+\end{itemize}
+}
+\section{Project organization}
+\frame{
+\begin{Huge}Project organization\end{Huge}}
+\subsection{Schedule}
+\frame{\frametitle{Schedule}
+\includegraphics[width=11cm]{gantt.png}
+}
+
+\subsection{Task Flow Chart}
+\frame{\frametitle{Task Flow Chart}
+\footnotesize
+Flow Chart 1 : During the User Requirement period
+\includegraphics[width=7cm]{user.png}
+\\
+Flow Chart 2 : During the Project period
+\includegraphics[width=9cm]{project.png}
+}
+
+
+\section{Resources for development}
+\frame{
+\begin{Huge}Resources for development\end{Huge}}
+\subsection{Equipment resources}
+\frame{\frametitle{Equipment resources}
+	\begin{itemize}
+		\item Software : Matlab and Visual Studio on Windows 
+		\item PC
+		\item Software coding for the transmission in C++
+		\item Two transmitters and receivers
+		\item IT++ and GUIDE Library on Windows 
+	\end{itemize}
+}
+\subsection{Technical resources}
+\frame{\frametitle{Technical resources}
+	\begin{itemize}
+		\item EEA project room
+	\end{itemize}
+}
+
+\section{Conclusion}
+\frame{
+The user requirement is essential before starting any project necessary to be presented to our client. It protects the project developer if the client demands other thing from what we have agreed. Moreover, it gives us an early information of what is the outcome of the project, how will the project will be done, and a brief information on the technology that we will use in our project. It also allows us to propose a solution for the task given under some constraints; time, finance, limited resources.  And finally, it gives us an opportunity of working as a team.}
+\end{document}
+
+
